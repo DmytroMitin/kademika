@@ -129,4 +129,11 @@ public class Tank {
 		}
 	}
 
+	public void destroy() {
+		x = - 100;
+		y = - 100;
+		direction = Direction.NONE;
+		af.processDestroy(this);
+	}
+
 }

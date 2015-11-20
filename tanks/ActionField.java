@@ -19,16 +19,17 @@ public class ActionField extends JPanel {
 	private Bullet bullet;
 
 	public void runTheGame() throws InterruptedException {
-//		tank.move();
-//		tank.move();
-//		tank.fire();
-//		tank.move();
-//		tank.turn(Direction.DOWN);
-//		tank.move();
-//		tank.turn(Direction.LEFT);
-//		tank.move();
-//		tank.turn(Direction.UP);
-//		tank.move();
+		tank.move();
+		tank.move();
+		tank.fire();
+		tank.move();
+		tank.turn(Direction.DOWN);
+		tank.move();
+		tank.turn(Direction.LEFT);
+		tank.move();
+		tank.turn(Direction.UP);
+		tank.move();
+		tank.destroy();
 
 //		tank.moveRandom();
 
@@ -44,7 +45,7 @@ public class ActionField extends JPanel {
 //		tank.turn(Direction.DOWN);
 //		tank.fire();
 
-		tank.clean();
+//		tank.clean();
 	}
 	
 	public boolean processInterception() {
@@ -114,28 +115,28 @@ public class ActionField extends JPanel {
 	}
 	
 	public ActionField() {
-//		String[][] field = {
-//				{ " ", " ", " ", "B", " ", " ", " ", " ", " " },
-//				{ " ", " ", " ", " ", " ", " ", " ", " ", " " },
-//				{ " ", " ", " ", " ", " ", " ", " ", " ", " " },
-//				{ " ", " ", " ", " ", " ", " ", " ", " ", " " },
-//				{ " ", " ", " ", " ", "B", " ", " ", " ", " " },
-//				{ " ", " ", " ", " ", " ", " ", " ", " ", " " },
-//				{ " ", " ", " ", " ", " ", " ", " ", " ", " " },
-//				{ " ", " ", " ", " ", " ", " ", " ", " ", " " },
-//				{ " ", " ", " ", " ", " ", " ", " ", " ", " " },
-//		};
 		String[][] field = {
-				{ "B", "B", "B", "B", "B", "B", "B", "B", "B" },
-				{ "B", "B", " ", " ", " ", " ", " ", " ", "B" },
-				{ " ", "B", "B", " ", "B", " ", "B", "B", "B" },
-				{ " ", "B", "B", " ", " ", " ", "B", "B", "B" },
-				{ " ", "B", "B", " ", "B", " ", "B", "B", "B" },
-				{ " ", "B", " ", "B", "B", "B", " ", "B", "B" },
-				{ " ", "B", " ", " ", " ", " ", " ", "B", "B" },
-				{ " ", " ", " ", "B", "B", "B", " ", " ", "B" },
-				{ " ", " ", " ", "B", "B", "B", " ", " ", "B" },
+				{ " ", " ", " ", "B", " ", " ", " ", " ", " " },
+				{ " ", " ", " ", " ", " ", " ", " ", " ", " " },
+				{ " ", " ", " ", " ", " ", " ", " ", " ", " " },
+				{ " ", " ", " ", " ", " ", " ", " ", " ", " " },
+				{ " ", " ", " ", " ", "B", " ", " ", " ", " " },
+				{ " ", " ", " ", " ", " ", " ", " ", " ", " " },
+				{ " ", " ", " ", " ", " ", " ", " ", " ", " " },
+				{ " ", " ", " ", " ", " ", " ", " ", " ", " " },
+				{ " ", " ", " ", " ", " ", " ", " ", " ", " " },
 		};
+//		String[][] field = {
+//				{ "B", "B", "B", "B", "B", "B", "B", "B", "B" },
+//				{ "B", "B", " ", " ", " ", " ", " ", " ", "B" },
+//				{ " ", "B", "B", " ", "B", " ", "B", "B", "B" },
+//				{ " ", "B", "B", " ", " ", " ", "B", "B", "B" },
+//				{ " ", "B", "B", " ", "B", " ", "B", "B", "B" },
+//				{ " ", "B", " ", "B", "B", "B", " ", "B", "B" },
+//				{ " ", "B", " ", " ", " ", " ", " ", "B", "B" },
+//				{ " ", " ", " ", "B", "B", "B", " ", " ", "B" },
+//				{ " ", " ", " ", "B", "B", "B", " ", " ", "B" },
+//		};
 		battleField = new BattleField(field);
 		tank = new Tank(new Quadrant(1, 1), Direction.RIGHT, this, battleField);
 		bullet = new Bullet(-100, -100, Direction.NONE);
@@ -221,4 +222,7 @@ public class ActionField extends JPanel {
 	}
 
 
+	public void processDestroy(Tank tank) {
+		repaint();
+	}
 }
