@@ -23,6 +23,8 @@ public class ActionField extends JPanel {
 		defender.move();
 		defender.turn(Direction.DOWN);
 		defender.fire();
+		defender.fire();
+		defender.fire();
 
 //		defender.move();
 //		defender.move();
@@ -59,6 +61,7 @@ public class ActionField extends JPanel {
 		if (getQuadrant(aggressor.getX(), aggressor.getY()).equals(quadrant)) {
 			aggressor.destroy();
 			bullet.destroy();
+			repaint();
 			Thread.sleep(3000);
 			aggressor = new Tank(getRandomQuadrant(), Direction.RIGHT, this, battleField);
 			repaint();
@@ -70,6 +73,7 @@ public class ActionField extends JPanel {
 			System.out.println("QUADRANT CLEANED, vertical: " + quadrant.v + ", horizontal: " + quadrant.h);
 			return true;
 		}
+
 		return false;
 	}
 	
@@ -132,7 +136,7 @@ public class ActionField extends JPanel {
 		String[][] field = {
 				{ " ", " ", " ", "B", " ", " ", " ", " ", " " },
 				{ " ", " ", " ", " ", " ", " ", " ", " ", " " },
-				{ " ", " ", " ", " ", " ", " ", " ", " ", " " },
+				{ " ", " ", "B", " ", " ", " ", " ", " ", " " },
 				{ " ", " ", " ", " ", " ", " ", " ", " ", " " },
 				{ " ", " ", " ", " ", "B", " ", " ", " ", " " },
 				{ " ", " ", " ", " ", " ", " ", " ", " ", " " },
@@ -154,9 +158,9 @@ public class ActionField extends JPanel {
 		battleField = new BattleField(field);
 		defender = new Tank(new Quadrant(1, 1), Direction.RIGHT, this, battleField);
 		bullet = new Bullet(-100, -100, Direction.NONE);
-		quadrants = new Quadrant[]{new Quadrant(3, 3)};
+		quadrants = new Quadrant[]{new Quadrant(3, 4)};
 //		quadrants = new Quadrant[]{new Quadrant(8, 8), new Quadrant(7, 7), new Quadrant(6, 6)};
-		aggressor = new Tank(getRandomQuadrant(), Direction.RIGHT, this, battleField);
+		aggressor = new Tiger(getRandomQuadrant(), Direction.RIGHT, this, battleField);
 
 		JFrame frame = new JFrame("BATTLE FIELD");
 		frame.setLocation(750, 150);
