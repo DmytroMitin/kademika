@@ -1,12 +1,8 @@
 package tanks;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Graphics;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.WindowConstants;
+import javax.swing.*;
+import java.awt.*;
+import java.util.Random;
 
 public class ActionField extends JPanel {
 	
@@ -15,6 +11,8 @@ public class ActionField extends JPanel {
 	private BattleField battleField;
 
 	private Tank tank;
+
+	private Tank aggressor;
 	
 	private Bullet bullet;
 
@@ -141,6 +139,9 @@ public class ActionField extends JPanel {
 		tank = new Tank(new Quadrant(1, 1), Direction.RIGHT, this, battleField);
 		bullet = new Bullet(-100, -100, Direction.NONE);
 
+		Quadrant[] quadrants = {new Quadrant(8, 8), new Quadrant(7, 7), new Quadrant(6, 6)};
+		aggressor = new Tank(getRandomQuadrant(quadrants), Direction.RIGHT, this, battleField);
+
 		JFrame frame = new JFrame("BATTLE FIELD");
 		frame.setLocation(750, 150);
 		frame.setMinimumSize(new Dimension(battleField.getWidth() + 16, battleField.getHeight() + 39));
@@ -201,6 +202,23 @@ public class ActionField extends JPanel {
 			}
 		}
 
+		if (aggressor != null) {
+			Tank tank = aggressor;
+			g.setColor(new Color(0, 0, 0));
+			g.fillRect(tank.getX(), tank.getY(), 64, 64);
+
+			g.setColor(new Color(0, 255, 0));
+			if (tank.getDirection() == Direction.UP) {
+				g.fillRect(tank.getX() + 20, tank.getY(), 24, 32);
+			} else if (tank.getDirection() == Direction.DOWN) {
+				g.fillRect(tank.getX() + 20, tank.getY() + 32, 24, 32);
+			} else if (tank.getDirection() == Direction.LEFT) {
+				g.fillRect(tank.getX(), tank.getY() + 20, 32, 24);
+			} else if (tank.getDirection() == Direction.RIGHT) {
+				g.fillRect(tank.getX() + 32, tank.getY() + 20, 32, 24);
+			}
+		}
+
 		if (bullet != null) {
 			g.setColor(new Color(255, 255, 0));
 			g.fillRect(bullet.getX(), bullet.getY(), 14, 14);
@@ -224,5 +242,11 @@ public class ActionField extends JPanel {
 
 	public void processDestroy(Tank tank) {
 		repaint();
+	}
+
+	public Quadrant getRandomQuadrant(Quadrant[] quadrants) {
+		Random random = new Random();
+		int randomNumber = random.nextInt(quadrants.length);
+		return quadrants[randomNumber];
 	}
 }
