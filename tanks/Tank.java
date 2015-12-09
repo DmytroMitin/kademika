@@ -1,21 +1,6 @@
 package tanks;
 
-import java.util.Random;
-
-public class Tank {
-	
-	private int speed = 20;
-	
-	private int x;
-
-	private int y;
-	
-	private Direction direction;
-	
-	private ActionField af;
-	
-	private BattleField bf;
-
+public class Tank extends AbstractTank {
 	public Tank(int x , int y, Direction direction, ActionField af, BattleField bf) {
 		this.x = x;
 		this.y = y;
@@ -55,16 +40,19 @@ public class Tank {
 	public void updateY(int step) {
 		y += step;
 	}
-	
+
+	@Override
 	public void turn(Direction direction) {
 		this.direction = direction;
 		af.processTurn(this);
 	}
 
+	@Override
 	public void move() throws InterruptedException {
 		af.processMove(this);
 	}
 
+	@Override
 	public void fire () throws InterruptedException {
 		Bullet bullet = new Bullet(this);
 		af.processFire(bullet);
@@ -129,6 +117,7 @@ public class Tank {
 		}
 	}
 
+	@Override
 	public void destroy() {
 		x = - 100;
 		y = - 100;
