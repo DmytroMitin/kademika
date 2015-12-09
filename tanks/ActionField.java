@@ -5,14 +5,12 @@ import java.awt.*;
 import java.util.Random;
 
 public class ActionField extends JPanel {
-	
-	private final boolean COLORED_MODE = false;
 
 	private BattleField battleField;
 
-	private T34 defender;
+	private AbstractTank defender;
 
-	private T34 aggressor;
+	private AbstractTank aggressor;
 	
 	private Bullet bullet;
 
@@ -56,28 +54,29 @@ public class ActionField extends JPanel {
 	}
 	
 	public boolean processInterception() throws InterruptedException {
-		Quadrant quadrant = getQuadrant(bullet.getX(), bullet.getY());
+		Quadrant bulletQuadrant = getQuadrant(bullet.getX(), bullet.getY());
+		Quadrant aggressorQuadrant = getQuadrant(aggressor.getX(), aggressor.getY());
 
-		if (getQuadrant(aggressor.getX(), aggressor.getY()).equals(quadrant)) {
+		if (aggressorQuadrant.equals(bulletQuadrant)) {
 			aggressor.destroy();
 			bullet.destroy();
 			repaint();
 			Thread.sleep(3000);
-			aggressor = new T34(getRandomQuadrant(), Direction.RIGHT, this, battleField);
+			aggressor = new Tiger(getRandomQuadrant(), Direction.RIGHT, this, battleField);
 			repaint();
 			return true;
 		}
 
-		if (!battleField.scan(quadrant).equals(" ")) {
-			battleField.update(quadrant, " ");
-			System.out.println("QUADRANT CLEANED, vertical: " + quadrant.v + ", horizontal: " + quadrant.h);
+		if (!battleField.scan(bulletQuadrant).equals(" ")) {
+			battleField.update(bulletQuadrant, " ");
+			System.out.println("QUADRANT CLEANED, vertical: " + bulletQuadrant.v + ", horizontal: " + bulletQuadrant.h);
 			return true;
 		}
 
 		return false;
 	}
 	
-	public void processMove(T34 tank) throws InterruptedException {
+	public void processMove(AbstractTank tank) throws InterruptedException {
 		this.defender = tank;
 		Quadrant startQuadrant = getQuadrant(tank.getX(), tank.getY());
 		Direction direction = tank.getDirection();
@@ -105,7 +104,7 @@ public class ActionField extends JPanel {
 				|| nextQuadrant.v < startQuadrant.v - 1 || nextQuadrant.h < startQuadrant.h - 1;
 	}
 	
-	public void processTurn(T34 tank) {
+	public void processTurn(AbstractTank tank) {
 		repaint();
 	}
 	
@@ -175,75 +174,13 @@ public class ActionField extends JPanel {
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
 
-		int i = 0;
-		Color cc;
-		for (int v = 0; v < 9; v++) {
-			for (int h = 0; h < 9; h++) {
-				if (COLORED_MODE) {
-					if (i % 2 == 0) {
-						cc = new Color(252, 241, 177);
-					} else {
-						cc = new Color(233, 243, 255);
-					}
-				} else {
-					cc = new Color(180, 180, 180);
-				}
-				i++;
-				g.setColor(cc);
-				g.fillRect(h * 64, v * 64, 64, 64);
-			}
-		}
+		battleField.draw(g);
 
-		for (int j = 1; j <= battleField.getDimensionY(); j++) {
-			for (int k = 1; k <= battleField.getDimensionX(); k++) {
-				if (battleField.scanQuadrant(k, j).equals("B")) {
-					Coordinates coordinates = getQuadrantXY(k, j);
-					int x = coordinates.x;
-					int y = coordinates.y;
-					g.setColor(new Color(0, 0, 255));
-					g.fillRect(x, y, 64, 64);
-				}
-			}
-		}
+		defender.draw(g);
 
-		if (defender != null) {
-			g.setColor(new Color(255, 0, 0));
-			g.fillRect(defender.getX(), defender.getY(), 64, 64);
-	
-			g.setColor(new Color(0, 255, 0));
-			if (defender.getDirection() == Direction.UP) {
-				g.fillRect(defender.getX() + 20, defender.getY(), 24, 32);
-			} else if (defender.getDirection() == Direction.DOWN) {
-				g.fillRect(defender.getX() + 20, defender.getY() + 32, 24, 32);
-			} else if (defender.getDirection() == Direction.LEFT) {
-				g.fillRect(defender.getX(), defender.getY() + 20, 32, 24);
-			} else if (defender.getDirection() == Direction.RIGHT) {
-				g.fillRect(defender.getX() + 32, defender.getY() + 20, 32, 24);
-			}
-		}
+		aggressor.draw(g);
 
-		if (aggressor != null) {
-			T34 tank = aggressor;
-			g.setColor(new Color(0, 255, 0));
-			g.fillRect(tank.getX(), tank.getY(), 64, 64);
-
-			g.setColor(new Color(255, 0, 0));
-			if (tank.getDirection() == Direction.UP) {
-				g.fillRect(tank.getX() + 20, tank.getY(), 24, 32);
-			} else if (tank.getDirection() == Direction.DOWN) {
-				g.fillRect(tank.getX() + 20, tank.getY() + 32, 24, 32);
-			} else if (tank.getDirection() == Direction.LEFT) {
-				g.fillRect(tank.getX(), tank.getY() + 20, 32, 24);
-			} else if (tank.getDirection() == Direction.RIGHT) {
-				g.fillRect(tank.getX() + 32, tank.getY() + 20, 32, 24);
-			}
-		}
-
-		if (bullet != null) {
-			g.setColor(new Color(255, 255, 0));
-			g.fillRect(bullet.getX(), bullet.getY(), 14, 14);
-		}
-		
+		bullet.draw(g);
 	}
 
 
@@ -260,7 +197,7 @@ public class ActionField extends JPanel {
 	}
 
 
-	public void processDestroy(T34 tank) {
+	public void processDestroy(AbstractTank tank) {
 		repaint();
 	}
 

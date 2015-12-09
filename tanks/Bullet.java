@@ -1,6 +1,8 @@
 package tanks;
 
-public class Bullet {
+import java.awt.*;
+
+public class Bullet implements Drowable, Destroyable {
 	
 	public final static int SPEED = 5;
 	
@@ -16,7 +18,7 @@ public class Bullet {
 		this.direction = direction;
 	}
 
-	public Bullet(T34 tank) {
+	public Bullet(AbstractTank tank) {
 		this(tank.getX() + 25 + 7 * tank.getDirection().stepX,
 			 tank.getY() + 25 + 7 * tank.getDirection().stepY,
 			 tank.getDirection());
@@ -42,9 +44,15 @@ public class Bullet {
 		y += step;
 	}
 
+	@Override
 	public void destroy() {
 		x = -100;
 		y = -100;
 	}
-	
+
+	@Override
+	public void draw(Graphics g) {
+		g.setColor(new Color(255, 255, 0));
+		g.fillRect(x, y, 14, 14);
+	}
 }
