@@ -1,7 +1,7 @@
 package tanks;
 
-public class Tank extends AbstractTank {
-	public Tank(int x , int y, Direction direction, ActionField af, BattleField bf) {
+public class T34 extends AbstractTank {
+	public T34(int x , int y, Direction direction, ActionField af, BattleField bf) {
 		this.x = x;
 		this.y = y;
 		this.direction = direction;
@@ -9,7 +9,7 @@ public class Tank extends AbstractTank {
 		this.bf = bf;
 	}
 
-	public Tank(Quadrant quadrant, Direction direction, ActionField af, BattleField bf) {
+	public T34(Quadrant quadrant, Direction direction, ActionField af, BattleField bf) {
 		this(ActionField.getQuadrantXY(quadrant).x,
 			 ActionField.getQuadrantXY(quadrant).y,
 			 direction,

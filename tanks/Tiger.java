@@ -1,6 +1,6 @@
 package tanks;
 
-public class Tiger extends Tank {
+public class Tiger extends T34 {
     int armor = 2;
 
     public Tiger(int x, int y, Direction direction, ActionField af, BattleField bf) {

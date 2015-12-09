@@ -10,9 +10,9 @@ public class ActionField extends JPanel {
 
 	private BattleField battleField;
 
-	private Tank defender;
+	private T34 defender;
 
-	private Tank aggressor;
+	private T34 aggressor;
 	
 	private Bullet bullet;
 
@@ -63,7 +63,7 @@ public class ActionField extends JPanel {
 			bullet.destroy();
 			repaint();
 			Thread.sleep(3000);
-			aggressor = new Tank(getRandomQuadrant(), Direction.RIGHT, this, battleField);
+			aggressor = new T34(getRandomQuadrant(), Direction.RIGHT, this, battleField);
 			repaint();
 			return true;
 		}
@@ -77,7 +77,7 @@ public class ActionField extends JPanel {
 		return false;
 	}
 	
-	public void processMove(Tank tank) throws InterruptedException {
+	public void processMove(T34 tank) throws InterruptedException {
 		this.defender = tank;
 		Quadrant startQuadrant = getQuadrant(tank.getX(), tank.getY());
 		Direction direction = tank.getDirection();
@@ -105,7 +105,7 @@ public class ActionField extends JPanel {
 				|| nextQuadrant.v < startQuadrant.v - 1 || nextQuadrant.h < startQuadrant.h - 1;
 	}
 	
-	public void processTurn(Tank tank) {
+	public void processTurn(T34 tank) {
 		repaint();
 	}
 	
@@ -156,7 +156,7 @@ public class ActionField extends JPanel {
 //				{ " ", " ", " ", "B", "B", "B", " ", " ", "B" },
 //		};
 		battleField = new BattleField(field);
-		defender = new Tank(new Quadrant(1, 1), Direction.RIGHT, this, battleField);
+		defender = new T34(new Quadrant(1, 1), Direction.RIGHT, this, battleField);
 		bullet = new Bullet(-100, -100, Direction.NONE);
 		quadrants = new Quadrant[]{new Quadrant(3, 4)};
 //		quadrants = new Quadrant[]{new Quadrant(8, 8), new Quadrant(7, 7), new Quadrant(6, 6)};
@@ -223,7 +223,7 @@ public class ActionField extends JPanel {
 		}
 
 		if (aggressor != null) {
-			Tank tank = aggressor;
+			T34 tank = aggressor;
 			g.setColor(new Color(0, 255, 0));
 			g.fillRect(tank.getX(), tank.getY(), 64, 64);
 
@@ -260,7 +260,7 @@ public class ActionField extends JPanel {
 	}
 
 
-	public void processDestroy(Tank tank) {
+	public void processDestroy(T34 tank) {
 		repaint();
 	}
 

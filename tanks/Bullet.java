@@ -16,7 +16,7 @@ public class Bullet {
 		this.direction = direction;
 	}
 
-	public Bullet(Tank tank) {
+	public Bullet(T34 tank) {
 		this(tank.getX() + 25 + 7 * tank.getDirection().stepX,
 			 tank.getY() + 25 + 7 * tank.getDirection().stepY,
 			 tank.getDirection());

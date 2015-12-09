@@ -17,7 +17,7 @@ public abstract class AbstractTank {
 
     public abstract void move() throws InterruptedException;
 
-    public abstract void fire () throws InterruptedException;
+    public abstract void fire() throws InterruptedException;
 
     public abstract void destroy();
 }
