@@ -58,12 +58,14 @@ public class ActionField extends JPanel {
 		Quadrant aggressorQuadrant = getQuadrant(aggressor.getX(), aggressor.getY());
 
 		if (aggressorQuadrant.equals(bulletQuadrant)) {
-			aggressor.destroy();
 			bullet.destroy();
 			repaint();
-			Thread.sleep(3000);
-			aggressor = new Tiger(getRandomQuadrant(), Direction.RIGHT, this, battleField);
-			repaint();
+			if (aggressor.destroy()) {
+				repaint();
+				Thread.sleep(3000);
+				aggressor = new Tiger(getRandomQuadrant(), Direction.RIGHT, this, battleField);
+				repaint();
+			}
 			return true;
 		}
 

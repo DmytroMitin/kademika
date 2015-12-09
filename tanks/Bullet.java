@@ -45,14 +45,15 @@ public class Bullet implements Drowable, Destroyable {
 	}
 
 	@Override
-	public void destroy() {
+	public boolean destroy() {
 		x = -100;
 		y = -100;
+		return true;
 	}
 
 	@Override
 	public void draw(Graphics g) {
-		g.setColor(new Color(255, 255, 0));
+		g.setColor(Color.YELLOW);
 		g.fillRect(x, y, 14, 14);
 	}
 }

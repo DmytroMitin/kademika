@@ -1,5 +1,7 @@
 package tanks;
 
+import java.awt.*;
+
 public abstract class AbstractTank implements Drowable, Destroyable {
 	protected int speed = 20;
 
@@ -12,6 +14,10 @@ public abstract class AbstractTank implements Drowable, Destroyable {
 	protected ActionField af;
 
 	protected BattleField bf;
+
+	protected Color tankColor;
+
+	protected Color towerColor;
 
 	public AbstractTank(int x , int y, Direction direction, ActionField af, BattleField bf) {
 		this.x = x;
@@ -127,10 +133,28 @@ public abstract class AbstractTank implements Drowable, Destroyable {
 	}
 
 	@Override
-	public void destroy() {
+	public void draw(Graphics g) {
+		g.setColor(tankColor);
+		g.fillRect(x, y, 64, 64);
+
+		g.setColor(towerColor);
+		if (getDirection() == Direction.UP) {
+			g.fillRect(x + 20, y, 24, 32);
+		} else if (getDirection() == Direction.DOWN) {
+			g.fillRect(x + 20, y + 32, 24, 32);
+		} else if (getDirection() == Direction.LEFT) {
+			g.fillRect(x, y + 20, 32, 24);
+		} else if (getDirection() == Direction.RIGHT) {
+			g.fillRect(x + 32, y + 20, 32, 24);
+		}
+	}
+
+	@Override
+	public boolean destroy() {
 		x = - 100;
 		y = - 100;
 		direction = Direction.NONE;
-		af.processDestroy(this);
+//		af.processDestroy(this);
+		return true;
 	}
 }

@@ -63,7 +63,7 @@ public class BattleField implements Drowable {
 						cc = new Color(233, 243, 255);
 					}
 				} else {
-					cc = new Color(180, 180, 180);
+					cc = Color.LIGHT_GRAY;
 				}
 				i++;
 				g.setColor(cc);
@@ -77,7 +77,7 @@ public class BattleField implements Drowable {
 					Coordinates coordinates = ActionField.getQuadrantXY(k, j);
 					int x = coordinates.x;
 					int y = coordinates.y;
-					g.setColor(new Color(0, 0, 255));
+					g.setColor(Color.BLUE);
 					g.fillRect(x, y, 64, 64);
 				}
 			}
