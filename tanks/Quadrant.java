@@ -1,5 +1,7 @@
 package tanks;
 
+import tanks.field.BattleField;
+
 public class Quadrant {
 	
 	public final int v, h;

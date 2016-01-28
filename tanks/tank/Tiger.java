@@ -1,4 +1,9 @@
-package tanks;
+package tanks.tank;
+
+import tanks.ActionField;
+import tanks.field.BattleField;
+import tanks.Direction;
+import tanks.Quadrant;
 
 import java.awt.*;
 

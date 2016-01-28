@@ -1,5 +1,10 @@
 package tanks;
 
+import tanks.field.BattleField;
+import tanks.tank.AbstractTank;
+import tanks.tank.T34;
+import tanks.tank.Tiger;
+
 import javax.swing.*;
 import java.awt.*;
 

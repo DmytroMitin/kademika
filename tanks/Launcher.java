@@ -1,5 +1,7 @@
 package tanks;
 
+import tanks.field.*;
+
 public class Launcher {
 	public static void main(String[] args) throws InterruptedException {
 		FieldObject[][] field = {

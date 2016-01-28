@@ -1,4 +1,4 @@
-package tanks;
+package tanks.field;
 
 import java.awt.*;
 

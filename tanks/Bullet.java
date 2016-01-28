@@ -1,5 +1,10 @@
 package tanks;
 
+import tanks.Destroyable;
+import tanks.Direction;
+import tanks.Drowable;
+import tanks.tank.AbstractTank;
+
 import java.awt.*;
 
 public class Bullet implements Drowable, Destroyable {

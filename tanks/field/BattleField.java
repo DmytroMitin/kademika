@@ -1,4 +1,9 @@
-package tanks;
+package tanks.field;
+
+import tanks.ActionField;
+import tanks.Coordinates;
+import tanks.Drowable;
+import tanks.Quadrant;
 
 import java.awt.*;
 
