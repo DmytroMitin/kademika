@@ -10,12 +10,12 @@ public class BattleField implements Drowable {
 	
 	private final int height;
 	
-	private String[][] battleField;
+	private FieldObject[][] field;
 
-	public BattleField(String[][] battleField) {
-		this.battleField = battleField;
-		width = battleField[0].length * 64;
-		height = battleField.length * 64;
+	public BattleField(FieldObject[][] field) {
+		this.field = field;
+		width = field[0].length * 64;
+		height = field.length * 64;
 	}
 
 	public int getWidth() {
@@ -34,24 +34,24 @@ public class BattleField implements Drowable {
 		return height / 64;
 	}
 
-	public String scanQuadrant(int v, int h) {
-		return battleField[h - 1][v - 1];
+	public FieldObject scanQuadrant(int v, int h) {
+		return field[h - 1][v - 1];
 	}
 
-	public String scan(Quadrant quadrant) {
+	public FieldObject scan(Quadrant quadrant) {
 		return scanQuadrant(quadrant.v, quadrant.h);
 	}
 
-	public void updateQuadrant(int v, int h, String str) {
-		battleField[h - 1][v - 1] = str;
+	public void updateQuadrant(int v, int h, FieldObject str) {
+		field[h - 1][v - 1] = str;
 	}
 
-	public void update(Quadrant quadrant, String str) {
+	public void update(Quadrant quadrant, FieldObject str) {
 		updateQuadrant(quadrant.v, quadrant.h, str);
 	}
 
 	@Override
-	public void draw(Graphics g) {
+	public void draw(Graphics graphics) {
 		int i = 0;
 		Color cc;
 		for (int v = 0; v < 9; v++) {
@@ -66,19 +66,18 @@ public class BattleField implements Drowable {
 					cc = Color.LIGHT_GRAY;
 				}
 				i++;
-				g.setColor(cc);
-				g.fillRect(h * 64, v * 64, 64, 64);
+				graphics.setColor(cc);
+				graphics.fillRect(h * 64, v * 64, 64, 64);
 			}
 		}
 
 		for (int j = 1; j <= getDimensionY(); j++) {
 			for (int k = 1; k <= getDimensionX(); k++) {
-				if (scanQuadrant(k, j).equals("B")) {
+				FieldObject object = scanQuadrant(k, j);
+				if (object != null) {
 					Coordinates coordinates = ActionField.getQuadrantXY(k, j);
-					int x = coordinates.x;
-					int y = coordinates.y;
-					g.setColor(Color.BLUE);
-					g.fillRect(x, y, 64, 64);
+					graphics.setColor(object.getColor());
+					graphics.fillRect(coordinates.x, coordinates.y, 64, 64);
 				}
 			}
 		}

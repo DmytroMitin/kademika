@@ -19,7 +19,7 @@ public class Quadrant {
 
 	public boolean hasEmptyNeighbor(Direction direction, BattleField bf) {
 		return this.hasNeighbor(direction, bf)
-				&& bf.scanQuadrant(v + direction.stepX, h + direction.stepY).equals(" ");
+				&& bf.scanQuadrant(v + direction.stepX, h + direction.stepY) == null;
 	}
 
 	@Override

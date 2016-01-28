@@ -70,7 +70,7 @@ public abstract class AbstractTank implements Drowable, Destroyable {
 
 	public void fire () throws InterruptedException {
 		Bullet bullet = new Bullet(this);
-		af.processFire(bullet);
+		af.processFire(bullet, this);
 	}
 
 	public void moveAndFire() throws InterruptedException {
@@ -133,19 +133,19 @@ public abstract class AbstractTank implements Drowable, Destroyable {
 	}
 
 	@Override
-	public void draw(Graphics g) {
-		g.setColor(tankColor);
-		g.fillRect(x, y, 64, 64);
+	public void draw(Graphics graphics) {
+		graphics.setColor(tankColor);
+		graphics.fillRect(x, y, 64, 64);
 
-		g.setColor(towerColor);
+		graphics.setColor(towerColor);
 		if (getDirection() == Direction.UP) {
-			g.fillRect(x + 20, y, 24, 32);
+			graphics.fillRect(x + 20, y, 24, 32);
 		} else if (getDirection() == Direction.DOWN) {
-			g.fillRect(x + 20, y + 32, 24, 32);
+			graphics.fillRect(x + 20, y + 32, 24, 32);
 		} else if (getDirection() == Direction.LEFT) {
-			g.fillRect(x, y + 20, 32, 24);
+			graphics.fillRect(x, y + 20, 32, 24);
 		} else if (getDirection() == Direction.RIGHT) {
-			g.fillRect(x + 32, y + 20, 32, 24);
+			graphics.fillRect(x + 32, y + 20, 32, 24);
 		}
 	}
 
