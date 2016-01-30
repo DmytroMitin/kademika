@@ -2,7 +2,6 @@ package tanks.tank;
 
 import tanks.*;
 import tanks.field.BattleField;
-import tanks.Bullet;
 
 import java.awt.*;
 
@@ -51,6 +50,10 @@ public abstract class AbstractTank implements Drowable, Destroyable {
 		return y;
 	}
 
+    public Quadrant getLocation() {
+        return ActionField.getQuadrant(getX(), getY());
+    }
+
 	public Direction getDirection() {
 		return direction;
 	}
@@ -64,7 +67,7 @@ public abstract class AbstractTank implements Drowable, Destroyable {
 	}
 
 	public void turn(Direction direction) {
-		this.direction = direction;
+        this.direction = direction;
 		af.processTurn(this);
 	}
 
@@ -78,28 +81,30 @@ public abstract class AbstractTank implements Drowable, Destroyable {
 	}
 
 	public void moveAndFire() throws InterruptedException {
-		Quadrant currentQuadrant = ActionField.getQuadrant(x,y);
-		Quadrant nextQuadrant = new Quadrant(currentQuadrant.v + direction.stepX,
-				                             currentQuadrant.h + direction.stepY);
-		if (!bf.scan(nextQuadrant).equals(" ")) {
+        Quadrant quadrant = getLocation();
+		Quadrant nextQuadrant = quadrant.getNeighbor(direction);
+        while (nextQuadrant.isValid(bf) && !af.moveIsLegal(this)) {
 			fire();
 		}
 		move();
 	}
 
 	public void moveRandom() throws InterruptedException {
-//		Random random = new Random();
 		while (true) {
-//			int randomNumber = random.nextInt(4);
-			int randomNumber = (int)(System.currentTimeMillis() % 4);
-			Direction randomDirection = Direction.values()[randomNumber];
-			turn(randomDirection);
+			turn(Direction.getRandomDirection());
 			move();
 		}
 	}
 
+    public void moveRandomAndFire() throws InterruptedException {
+        while (true) {
+            turn(Direction.getRandomDirection());
+            moveAndFire();
+        }
+    }
+
 	public void moveToQuadrantAndFire(Quadrant quadrant) throws InterruptedException {
-		Quadrant currentQuadrant = ActionField.getQuadrant(x,y);
+        Quadrant currentQuadrant = getLocation();
 
 		int differenceV = quadrant.v - currentQuadrant.v;
 		Direction directionV = Direction.getByStepX((int)Math.signum(differenceV));
@@ -119,22 +124,26 @@ public abstract class AbstractTank implements Drowable, Destroyable {
 	}
 
 	public void clean() throws InterruptedException {
-		for (int i = 1; i <= bf.getDimensionY(); i++) {
-			if (i % 2 != 0) {
-				for (int j = 1; j <= bf.getDimensionX(); j++) {
-					if (!bf.scanQuadrant(j,i).equals(" ")) {
-						moveToQuadrantAndFire(new Quadrant(j,i));
+		for (int h = 1; h <= bf.getDimensionY(); h++) {
+			if (h % 2 != 0) {
+				for (int v = 1; v <= bf.getDimensionX(); v++) {
+					if (bf.scanQuadrant(v,h) != null) {
+						moveToQuadrantAndFire(new Quadrant(v,h));
 					}
 				}
 			} else {
-				for (int j = bf.getDimensionX(); j >= 1; j--) {
-					if (!bf.scanQuadrant(j,i).equals(" ")) {
-						moveToQuadrantAndFire(new Quadrant(j,i));
+				for (int v = bf.getDimensionX(); v >= 1; v--) {
+					if (bf.scanQuadrant(v,h) != null) {
+						moveToQuadrantAndFire(new Quadrant(v,h));
 					}
 				}
 			}
 		}
 	}
+
+	public void attackEagle() throws InterruptedException {
+        moveToQuadrantAndFire(bf.findEagle());
+    }
 
 	@Override
 	public void draw(Graphics graphics) {
@@ -158,7 +167,7 @@ public abstract class AbstractTank implements Drowable, Destroyable {
 		x = - 100;
 		y = - 100;
 		direction = Direction.NONE;
-//		af.processDestroy(this);
+		af.processDestroy(this);
 		return true;
 	}
 }

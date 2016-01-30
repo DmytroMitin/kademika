@@ -15,13 +15,17 @@ public class Quadrant {
 		return v >= 1 && v <= bf.getDimensionX() && h >= 1 && h <= bf.getDimensionY();
 	}
 
+	public Quadrant getNeighbor(Direction direction) {
+        return new Quadrant(v + direction.stepX, h + direction.stepY);
+    }
+
 	public boolean hasNeighbor(Direction direction, BattleField bf) {
-		return new Quadrant(v + direction.stepX, h + direction.stepY).isValid(bf);
+		return getNeighbor(direction).isValid(bf);
 	}
 
 	public boolean hasEmptyNeighbor(Direction direction, BattleField bf) {
-		return this.hasNeighbor(direction, bf)
-				&& bf.scanQuadrant(v + direction.stepX, h + direction.stepY) == null;
+        Quadrant neighborQuadrant = getNeighbor(direction);
+        return this.hasNeighbor(direction, bf) && bf.scan(neighborQuadrant) == null;
 	}
 
 	@Override
@@ -44,4 +48,12 @@ public class Quadrant {
 	public int hashCode() {
 		return 31 * v + h;
 	}
+
+    @Override
+    public String toString() {
+        return "Quadrant{" +
+                "v=" + v +
+                ", h=" + h +
+                '}';
+    }
 }

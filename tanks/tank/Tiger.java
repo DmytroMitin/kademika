@@ -33,4 +33,9 @@ public class Tiger extends AbstractTank {
         }
         return false;
     }
+
+    @Override
+    public String toString() {
+        return "Tiger";
+    }
 }

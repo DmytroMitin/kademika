@@ -21,4 +21,9 @@ public class T34 extends AbstractTank {
              af,
              bf);
     }
+
+    @Override
+    public String toString() {
+        return "T34";
+    }
 }

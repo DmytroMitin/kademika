@@ -1,8 +1,5 @@
 package tanks;
 
-import tanks.Destroyable;
-import tanks.Direction;
-import tanks.Drowable;
 import tanks.tank.AbstractTank;
 
 import java.awt.*;
@@ -36,6 +33,10 @@ public class Bullet implements Drowable, Destroyable {
 	public int getY() {
 		return y;
 	}
+
+	public Quadrant getLocation() {
+        return ActionField.getQuadrant(getX(), getY());
+    }
 
 	public Direction getDirection() {
 		return direction;

@@ -76,15 +76,27 @@ public class BattleField implements Drowable {
 			}
 		}
 
-		for (int j = 1; j <= getDimensionY(); j++) {
-			for (int k = 1; k <= getDimensionX(); k++) {
-				FieldObject object = scanQuadrant(k, j);
+		for (int h = 1; h <= getDimensionY(); h++) {
+			for (int v = 1; v <= getDimensionX(); v++) {
+				FieldObject object = scanQuadrant(v, h);
 				if (object != null) {
-					Coordinates coordinates = ActionField.getQuadrantXY(k, j);
+					Coordinates coordinates = ActionField.getQuadrantXY(v, h);
 					graphics.setColor(object.getColor());
 					graphics.fillRect(coordinates.x, coordinates.y, 64, 64);
 				}
 			}
 		}
+	}
+
+	public Quadrant findEagle() {
+		for (int h = 1; h <= getDimensionY(); h++) {
+			for (int v = 1; v <= getDimensionX(); v++) {
+				FieldObject object = scanQuadrant(v, h);
+				if (object != null && object.getClass() == Eagle.class) {
+					return new Quadrant(v, h);
+				}
+			}
+		}
+		return null;
 	}
 }
