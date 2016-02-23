@@ -5,7 +5,10 @@ import tanks.Coordinates;
 import tanks.Drowable;
 import tanks.Quadrant;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
+import java.io.File;
+import java.io.IOException;
 
 public class BattleField implements Drowable {
 
@@ -81,9 +84,14 @@ public class BattleField implements Drowable {
 				FieldObject object = scanQuadrant(v, h);
 				if (object != null) {
 					Coordinates coordinates = ActionField.getQuadrantXY(v, h);
-					graphics.setColor(object.getColor());
-					graphics.fillRect(coordinates.x, coordinates.y, 64, 64);
-				}
+//					graphics.setColor(object.getColor());
+//					graphics.fillRect(coordinates.x, coordinates.y, 64, 64);
+                    try {
+                        graphics.drawImage(ImageIO.read(new File(object.getFile())), coordinates.x, coordinates.y, null);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
 			}
 		}
 	}

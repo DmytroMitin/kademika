@@ -4,7 +4,8 @@ import java.awt.*;
 
 public class Eagle extends FieldObject {
     public Eagle() {
-        color = Color.ORANGE;
+//        color = Color.ORANGE;
+        file = "bin/tanks/img/eagle.jpg";
     }
 
 }

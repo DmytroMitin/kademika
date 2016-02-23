@@ -5,7 +5,10 @@ import tanks.field.BattleField;
 import tanks.Direction;
 import tanks.Quadrant;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
+import java.io.File;
+import java.io.IOException;
 
 public class Tiger extends AbstractTank {
     private int armor = 2;
@@ -22,6 +25,25 @@ public class Tiger extends AbstractTank {
                 direction,
                 af,
                 bf);
+    }
+
+    @Override
+    public void draw(Graphics graphics) {
+        try {
+            File file = null;
+            if (direction == Direction.LEFT || direction == Direction.NONE) {
+                file = new File("bin/tanks/img/tank1_left.jpg");
+            } else if (direction == Direction.RIGHT) {
+                file = new File("bin/tanks/img/tank1_right.jpg");
+            } else if (direction == Direction.UP) {
+                file = new File("bin/tanks/img/tank1_up.jpg");
+            } else if (direction == Direction.DOWN) {
+                file = new File("bin/tanks/img/tank1_down.jpg");
+            }
+            graphics.drawImage(ImageIO.read(file), x, y, null);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

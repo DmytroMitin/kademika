@@ -149,37 +149,7 @@ public abstract class AbstractTank implements Drowable, Destroyable {
     }
 
 	@Override
-	public void draw(Graphics graphics) {
-		try {
-            File file = null;
-            if (direction == Direction.LEFT || direction == Direction.NONE) {
-                file = new File("bin/tanks/tank/tank_left.jpg");
-            } else if (direction == Direction.RIGHT) {
-                file = new File("bin/tanks/tank/tank_right.jpg");
-            } else if (direction == Direction.UP) {
-                file = new File("bin/tanks/tank/tank_up.jpg");
-            } else if (direction == Direction.DOWN) {
-                file = new File("bin/tanks/tank/tank_down.jpg");
-            }
-            graphics.drawImage(ImageIO.read(file), x, y, null);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-//		graphics.setColor(tankColor);
-//		graphics.fillRect(x, y, 64, 64);
-//
-//		graphics.setColor(towerColor);
-//		if (getDirection() == Direction.UP) {
-//			graphics.fillRect(x + 20, y, 24, 32);
-//		} else if (getDirection() == Direction.DOWN) {
-//			graphics.fillRect(x + 20, y + 32, 24, 32);
-//		} else if (getDirection() == Direction.LEFT) {
-//			graphics.fillRect(x, y + 20, 32, 24);
-//		} else if (getDirection() == Direction.RIGHT) {
-//			graphics.fillRect(x + 32, y + 20, 32, 24);
-//		}
-	}
+	public abstract void draw(Graphics graphics);
 
 	@Override
 	public boolean destroy() {
