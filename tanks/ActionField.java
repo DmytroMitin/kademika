@@ -21,7 +21,7 @@ public class ActionField extends JPanel {
 	private Bullet bullet;
 
 	public void runTheGame() throws InterruptedException {
-		aggressor.attackEagle();
+		aggressor.destroyOpponent();
 	}
 
     public Quadrant getOpponentLocation() {

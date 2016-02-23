@@ -25,6 +25,8 @@ public abstract class AbstractTank implements Drowable, Destroyable {
 
 	protected Color towerColor;
 
+    protected String filePrefix = "bin/tanks/img/tank";
+
 	public AbstractTank(int x , int y, Direction direction, ActionField af, BattleField bf) {
 		this.x = x;
 		this.y = y;
@@ -148,8 +150,37 @@ public abstract class AbstractTank implements Drowable, Destroyable {
         moveToQuadrantAndFire(bf.findEagle());
     }
 
-	@Override
-	public abstract void draw(Graphics graphics);
+    public void destroyOpponent() throws InterruptedException {
+        Quadrant quadrant;
+        do {
+            quadrant = af.getOpponentLocation();
+            moveToQuadrantAndFire(quadrant);
+        } while (quadrant.isValid(bf));
+    }
+
+    @Override
+    public void draw(Graphics graphics) {
+        try {
+            File file = new File(filePrefix + "_" + direction.name() + ".jpg");
+            graphics.drawImage(ImageIO.read(file), x, y, null);
+        } catch (IOException e) {
+            e.printStackTrace();
+
+            graphics.setColor(tankColor);
+            graphics.fillRect(x, y, 64, 64);
+
+            graphics.setColor(towerColor);
+            if (getDirection() == Direction.UP) {
+                graphics.fillRect(x + 20, y, 24, 32);
+            } else if (getDirection() == Direction.DOWN) {
+                graphics.fillRect(x + 20, y + 32, 24, 32);
+            } else if (getDirection() == Direction.LEFT) {
+                graphics.fillRect(x, y + 20, 32, 24);
+            } else if (getDirection() == Direction.RIGHT) {
+                graphics.fillRect(x + 32, y + 20, 32, 24);
+            }
+        }
+    }
 
 	@Override
 	public boolean destroy() {

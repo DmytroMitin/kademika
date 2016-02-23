@@ -1,14 +1,10 @@
 package tanks.field;
 
-import tanks.ActionField;
-import tanks.Coordinates;
 import tanks.Drowable;
 import tanks.Quadrant;
 
-import javax.imageio.ImageIO;
 import java.awt.*;
-import java.io.File;
-import java.io.IOException;
+import java.util.List;
 
 public class BattleField implements Drowable {
 
@@ -17,13 +13,22 @@ public class BattleField implements Drowable {
 	private final int width;
 	
 	private final int height;
+
+    private final int dimensionX;
+
+    private final int dimensionY;
 	
 	private FieldObject[][] field;
 
-	public BattleField(FieldObject[][] field) {
-		this.field = field;
-		width = field[0].length * 64;
-		height = field.length * 64;
+	public BattleField(List<FieldObject> objects, int dimensionX, int dimensionY) {
+		this.field = new FieldObject[dimensionY][dimensionX];
+        for (FieldObject object : objects) {
+            update(object.getQuadrant(), object);
+        }
+        this.dimensionX = dimensionX;
+        this.dimensionY = dimensionY;
+		this.width = dimensionX * 64;
+		this.height = dimensionY * 64;
 	}
 
 	public int getWidth() {
@@ -35,11 +40,11 @@ public class BattleField implements Drowable {
 	}
 
 	public int getDimensionX() {
-		return width / 64;
+		return dimensionX;
 	}
 	
 	public int getDimensionY() {
-		return height / 64;
+		return dimensionY;
 	}
 
 	public FieldObject scanQuadrant(int v, int h) {
@@ -83,14 +88,7 @@ public class BattleField implements Drowable {
 			for (int v = 1; v <= getDimensionX(); v++) {
 				FieldObject object = scanQuadrant(v, h);
 				if (object != null) {
-					Coordinates coordinates = ActionField.getQuadrantXY(v, h);
-//					graphics.setColor(object.getColor());
-//					graphics.fillRect(coordinates.x, coordinates.y, 64, 64);
-                    try {
-                        graphics.drawImage(ImageIO.read(new File(object.getFile())), coordinates.x, coordinates.y, null);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+					object.draw(graphics);
                 }
 			}
 		}
