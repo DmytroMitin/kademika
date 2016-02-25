@@ -1,108 +1,84 @@
 package bookshop;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Bookshop {
-    private final int DEFAULT_CAPACITY = 100;
+    private List<Book> books;
 
-    private Book[] books;
+    private List<User> users;
 
-    private User[] users;
+    private List<Card> cards;
 
-    private Card[] cards;
+    private List<Genre> genres;
 
-    private Genre[] genres;
-
-    private Payment[] payments;
-
-    private int numberOfBooks;
-
-    private int numberOfUsers;
-
-    private int numberOfCards;
-
-    private int numberOfGenres;
-
-    private int numberOfPayments;
+    private List<Payment> payments;
 
     public Bookshop() {
-        books = new Book[DEFAULT_CAPACITY];
-        users = new User[DEFAULT_CAPACITY];
-        cards = new Card[DEFAULT_CAPACITY];
-        genres = new Genre[DEFAULT_CAPACITY];
-        payments = new Payment[DEFAULT_CAPACITY];
+        books = new ArrayList<>();
+        users = new ArrayList<>();
+        cards = new ArrayList<>();
+        genres = new ArrayList<>();
+        payments = new ArrayList<>();
     }
 
-    public Book[] getBooks() {
+    public List<Book> getBooks() {
         return books;
     }
 
-    public User[] getUsers() {
+    public List<User> getUsers() {
         return users;
     }
 
-    public Card[] getCards() {
+    public List<Card> getCards() {
         return cards;
     }
 
-    public Genre[] getGenres() {
+    public List<Genre> getGenres() {
         return genres;
     }
 
-    public Payment[] getPayments() {
+    public List<Payment> getPayments() {
         return payments;
     }
 
     public int getNumberOfBooks() {
-        return numberOfBooks;
+        return books.size();
     }
 
     public int getNumberOfUsers() {
-        return numberOfUsers;
+        return users.size();
     }
 
     public int getNumberOfCards() {
-        return numberOfCards;
+        return cards.size();
     }
 
     public int getNumberOfGenres() {
-        return numberOfGenres;
+        return genres.size();
     }
 
     public int getNumberOfPayments() {
-        return numberOfPayments;
+        return payments.size();
     }
 
     public void addBook(Book book) {
-        if (numberOfBooks < DEFAULT_CAPACITY) {
-            books[numberOfBooks] = book;
-            numberOfBooks++;
-        }
+        books.add(book);
     }
 
     public void addUser(User user) {
-        if (numberOfUsers < DEFAULT_CAPACITY) {
-            users[numberOfUsers] = user;
-            numberOfUsers++;
-        }
+        users.add(user);
     }
 
     public void addCard(Card card) {
-        if (numberOfCards < DEFAULT_CAPACITY) {
-            cards[numberOfCards] = card;
-            numberOfCards++;
-        }
+        cards.add(card);
     }
 
     public void addGenre(Genre genre) {
-        if (numberOfGenres < DEFAULT_CAPACITY) {
-            genres[numberOfGenres] = genre;
-            numberOfGenres++;
-        }
+        genres.add(genre);
     }
 
     public void addPayment(Payment payment) {
-        if (numberOfPayments < DEFAULT_CAPACITY) {
-            payments[numberOfPayments] = payment;
-            numberOfPayments++;
-        }
+        payments.add(payment);
     }
 }

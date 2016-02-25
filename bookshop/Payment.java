@@ -1,13 +1,15 @@
 package bookshop;
 
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 public class Payment {
     private static int currentId = 0;
 
     private final int id;
 
-    private Date date;
+    private Calendar date;
 
     private User user;
 
@@ -26,7 +28,10 @@ public class Payment {
     public Payment(User user, Book book, String deliveryAddress, int amount) {
         this.id = currentId;
         currentId++;
-        this.date = new Date();
+
+        this.date = new GregorianCalendar();
+        this.date.setTime(new Date());
+
         this.user = user;
         this.book = book;
         this.amount = amount;
@@ -38,7 +43,7 @@ public class Payment {
         return id;
     }
 
-    public Date getDate() {
+    public Calendar getDate() {
         return date;
     }
 
@@ -58,7 +63,30 @@ public class Payment {
         return sum;
     }
 
-    public void setDate(Date date) {
+    public void setDate(Calendar date) {
         this.date = date;
+    }
+
+    @Override
+    public String toString() {
+        return "Payment{" +
+                "id=" + id +
+                ",\n" +
+                "date=" + date +
+                ",\n" +
+                "user=" + user +
+                ",\n" +
+                "book=" + book +
+                ",\n" +
+                "amount=" + amount +
+                ",\n" +
+                "deliveryAddress='" + deliveryAddress + '\'' +
+                ",\n" +
+                "sum=" + sum +
+                ",\n" +
+                "card=" + card +
+                ",\n" +
+                "status=" + status +
+                '}';
     }
 }

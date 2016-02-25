@@ -1,6 +1,7 @@
 package bookshop;
 
 import java.time.Month;
+import java.util.List;
 
 public class Card {
     private String name;
@@ -13,6 +14,6 @@ public class Card {
 
     private String bank;
 
-    private User[] users;
+    private List<User> users;
 }
 

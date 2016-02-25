@@ -1,6 +1,8 @@
 package bookshop;
 
+import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 public class User {
     private static int currentId = 0;
@@ -11,21 +13,21 @@ public class User {
 
     private String email;
 
-    private Date registrationDate;
+    private Calendar registrationDate;
 
     private String defaultDeliveryAddress;
 
-    private Payment[] payments;
+    private List<Payment> payments;
 
-    private Book[] booksBought;
+    private List<Book> booksBought;
 
-    private Card[] cards;
+    private List<Card> cards;
 
     private Card defaultCard;
 
-    private Genre[] favoriteGenres;
+    private List<Genre> favoriteGenres;
 
-    public User(String name, String email, Date registrationDate) {
+    public User(String name, String email, Calendar registrationDate) {
         this.id = currentId;
         currentId++;
         this.name = name;
@@ -35,5 +37,21 @@ public class User {
 
     public String getName() {
         return name;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                ", registrationDate=" + registrationDate +
+                ", defaultDeliveryAddress='" + defaultDeliveryAddress + '\'' +
+                ", payments=" + payments +
+                ", booksBought=" + booksBought +
+                ", cards=" + cards +
+                ", defaultCard=" + defaultCard +
+                ", favoriteGenres=" + favoriteGenres +
+                '}';
     }
 }

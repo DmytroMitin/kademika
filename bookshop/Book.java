@@ -1,5 +1,8 @@
 package bookshop;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class Book {
     private static int currentId = 0;
 
@@ -9,18 +12,24 @@ public class Book {
 
     private String author;
 
-    private Genre[] genres;
+    private List<Genre> genres;
 
     private int price;
 
     private int amount;
 
-    private Book[] similarBooks;
+    private List<Book> similarBooks;
 
-    public Book(String title, String author, int price, int amount, Genre[] genres) {
+    public Book(String title, String author, int price, int amount, Genre... genres) {
         this.id = currentId;
         currentId++;
-        this.genres = genres;
+
+        this.genres = Arrays.asList(genres);
+
+        for (Genre genre : genres) {
+            genre.addBook(this);
+        }
+
         this.title = title;
         this.author = author;
         this.price = price;
@@ -35,7 +44,7 @@ public class Book {
         return author;
     }
 
-    public Genre[] getGenres() {
+    public List<Genre> getGenres() {
         return genres;
     }
 
@@ -45,5 +54,18 @@ public class Book {
 
     public int getAmount() {
         return amount;
+    }
+
+    @Override
+    public String toString() {
+        return "Book{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", author='" + author + '\'' +
+                ", genres=" + genres +
+                ", price=" + price +
+                ", amount=" + amount +
+                ", similarBooks=" + similarBooks +
+                '}';
     }
 }
