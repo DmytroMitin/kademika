@@ -1,7 +1,6 @@
 package bookshop;
 
 import java.util.Calendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
 
 public class Launcher {
@@ -90,6 +89,6 @@ public class Launcher {
 //        System.out.println();
 //        reportMaker.printCatalog();
 
-        BookshopUi ui = new BookshopUi(bookshop);
+        BookshopUI ui = new BookshopUI(bookshop);
     }
 }

@@ -6,48 +6,47 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.SimpleDateFormat;
-import java.util.Enumeration;
 
 import static java.awt.GridBagConstraints.*;
 
-public class BookshopUi {
-    private Bookshop bookshop;
+public class BookshopUI {
+    private final Bookshop bookshop;
 
     private int bookIndex;
 
-    private JFrame paymentFrame;
+    private final JPanel panels;
 
-    public BookshopUi(Bookshop bookshop) {
+    public BookshopUI(Bookshop bookshop) {
         this.bookshop = bookshop;
 
-        createSellingFrame();
+        JFrame frame = new JFrame();
+        frame.setMinimumSize(new Dimension(800, 600));
+        frame.setLocation(400, 200);
+        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
-        createPaymentFrame();
-    }
+        CardLayout cardLayout = new CardLayout();
+        panels = new JPanel(cardLayout);
+        panels.add(createPaymentListPanel(), "paymentListPanel");
+        panels.add(createSellingPanel(), "sellingPanel");
+        frame.getContentPane().add(panels);
 
-    private void createSellingFrame() {
-        JFrame sellingFrame = new JFrame();
-        sellingFrame.setMinimumSize(new Dimension(800, 600));
-        sellingFrame.setLocation(300, 100);
-        sellingFrame.getContentPane().add(createSellingPanel());
-        sellingFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        sellingFrame.pack();
-        sellingFrame.setVisible(true);
-    }
+        JMenuBar menuBar = new JMenuBar();
+        frame.setJMenuBar(menuBar);
+        JMenu menu = new JMenu("Menu");
+        menuBar.add(menu);
+        JMenuItem menuItem = new JMenuItem("Buy books");
+        menu.add(menuItem);
+        menuItem.addActionListener(e -> cardLayout.show(panels, "sellingPanel"));
+        JMenuItem menuItem1 = new JMenuItem("Show payments");
+        menu.add(menuItem1);
+        menuItem1.addActionListener(e -> cardLayout.show(panels, "paymentListPanel"));
 
-    private void createPaymentFrame() {
-        paymentFrame = new JFrame();
-        paymentFrame.setMinimumSize(new Dimension(800, 600));
-        paymentFrame.setLocation(400, 200);
-        paymentFrame.getContentPane().add(createPaymentPanel());
-        paymentFrame.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
-        paymentFrame.pack();
-        paymentFrame.setVisible(true);
+        frame.pack();
+        frame.setVisible(true);
     }
 
     private JPanel createSellingPanel() {
-        JPanel panel = new JPanel();
-        panel.setLayout(new GridBagLayout());
+        JPanel panel = new JPanel(new GridBagLayout());
 
         JLabel nameLabel = new JLabel("Your name ");
         panel.add(nameLabel, new GridBagConstraints(0, 0, 1, 1, 0, 0, CENTER, NONE, new Insets(0, 0, 0, 0), 0, 0));
@@ -58,13 +57,12 @@ public class BookshopUi {
         JLabel bookLabel = new JLabel("Book");
         panel.add(bookLabel, new GridBagConstraints(0, 1, 1, 1, 0, 0, NORTH, NONE, new Insets(0, 0, 0, 0), 0, 0));
 
-        JPanel bookPanel = new JPanel();
-        bookPanel.setLayout(new GridBagLayout());
+        JPanel bookPanel = new JPanel(new GridBagLayout());
         bookPanel.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
         ButtonGroup bookButtonGroup = new ButtonGroup();
         ActionListener bookButtonListener = new BookButtonListener();
-        int i = 0;
-        for (Book book : bookshop.getBooks()) {
+        for (int i = 0; i < bookshop.getNumberOfBooks(); i++) {
+            Book book = bookshop.getBookById(i);
             JRadioButton button = new JRadioButton(book.getAuthor() + ". " + book.getTitle());
             if (i == 0) {
                 button.setSelected(true);
@@ -73,7 +71,6 @@ public class BookshopUi {
             button.addActionListener(bookButtonListener);
             bookButtonGroup.add(button);
             bookPanel.add(button, new GridBagConstraints(0, i, 1, 1, 0, 0, WEST, NONE, new Insets(0, 0, 0, 0), 0, 0));
-            i++;
         }
         panel.add(bookPanel, new GridBagConstraints(1, 1, 1, 1, 0, 0, CENTER, NONE, new Insets(0, 0, 0, 0), 0, 0));
 
@@ -94,8 +91,9 @@ public class BookshopUi {
 
             bookshop.addPayment(payment);
 
-            paymentFrame.setVisible(false);
-            createPaymentFrame();
+            panels.add(createPaymentListPanel(), "paymentListPanel");
+            CardLayout layout = (CardLayout) panels.getLayout();
+            layout.show(panels, "paymentListPanel");
         });
         panel.add(buyButton, new GridBagConstraints(0, 3, 2, 1, 0, 0, CENTER, NONE, new Insets(0, 0, 0, 0), 0, 0));
 
@@ -111,12 +109,13 @@ public class BookshopUi {
         }
     }
 
-    private JPanel createPaymentPanel() {
+    private JPanel createPaymentListPanel() {
         JPanel panel = new JPanel();
 
         String[][] data = new String[bookshop.getNumberOfPayments()][];
-        int i = 0;
-        for (Payment payment : bookshop.getPayments()) {
+
+        for (int i = 0; i < bookshop.getNumberOfPayments(); i++) {
+            Payment payment = bookshop.getPaymentById(i);
             data[i] = new String[]{
                     Integer.toString(payment.getId()),
                     new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(payment.getDate().getTime()),
@@ -124,8 +123,8 @@ public class BookshopUi {
                     payment.getBook().getAuthor() + ". " + payment.getBook().getTitle(),
                     Integer.toString(payment.getAmount())
             };
-            i++;
         }
+
         String[] columnNames = new String[]{"Id", "Date", "Name", "Book", "Amount"};
         JTable table = new JTable(data, columnNames);
         TableColumnModel columnModel = table.getColumnModel();

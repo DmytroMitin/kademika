@@ -81,4 +81,12 @@ public class Bookshop {
     public void addPayment(Payment payment) {
         payments.add(payment);
     }
+
+    public Payment getPaymentById(int i) {
+        return payments.get(i);
+    }
+
+    public Book getBookById(int i) {
+        return books.get(i);
+    }
 }
