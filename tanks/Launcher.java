@@ -2,6 +2,7 @@ package tanks;
 
 import tanks.field.*;
 
+import javax.swing.*;
 import java.util.Arrays;
 import java.util.List;
 
@@ -22,9 +23,10 @@ public class Launcher {
                 new Brick(6, 9),
                 new Water(9, 9)
         );
+
 		BattleField battleField = new BattleField(objects, 9, 9);
-		ActionField actionField = new ActionField(battleField, new Quadrant(1, 1), Direction.RIGHT,
-				new Quadrant(9, 1), Direction.LEFT);
-		actionField.runTheGame();
+
+        SwingUtilities.invokeLater(() -> new StartPanel(battleField));
+
 	}
 }

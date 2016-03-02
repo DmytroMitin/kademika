@@ -5,24 +5,54 @@ import tanks.tank.AbstractTank;
 import tanks.tank.T34;
 import tanks.tank.Tiger;
 
-import javax.swing.*;
-import java.awt.*;
+public class ActionField {
+	private final BattleField battleField;
 
-public class ActionField extends JPanel {
+	private final AbstractTank defender;
 
-	private BattleField battleField;
-
-	private AbstractTank defender;
-
-	private AbstractTank aggressor;
+	private final AbstractTank aggressor;
 
 	private AbstractTank currentTank;
-	
+
 	private Bullet bullet;
 
-	public void runTheGame() throws InterruptedException {
-		aggressor.destroyOpponent();
-	}
+    public ActionField(BattleField battleField,
+                       Quadrant defenderQuadrant, Direction defenderDirection, String defenderType,
+                       Quadrant aggressorQuadrant, Direction aggressorDirection)
+    {
+        this.battleField = battleField;
+        if (defenderType.equals("Tiger")) {
+            defender = new Tiger(defenderQuadrant, defenderDirection, this, battleField);
+        } else {
+            defender = new T34(defenderQuadrant, defenderDirection, this, battleField);
+        }
+        bullet = new Bullet(-100, -100, Direction.NONE);
+        aggressor = new Tiger(aggressorQuadrant, aggressorDirection, this, battleField);
+        currentTank = defender;
+    }
+
+    public AbstractTank getAggressor() {
+        return aggressor;
+    }
+
+    public AbstractTank getDefender() {
+        return defender;
+    }
+
+    public Bullet getBullet() {
+        return bullet;
+    }
+
+    public BattleField getBattleField() {
+        return battleField;
+    }
+
+    public void runTheGame() throws InterruptedException {
+        defender.move();
+        defender.fire();
+        defender.move();
+        defender.fire();
+    }
 
     public Quadrant getOpponentLocation() {
         return getOpponent().getLocation();
@@ -36,16 +66,17 @@ public class ActionField extends JPanel {
 		}
 	}
 
-	public boolean processInterception() throws InterruptedException {
+	public boolean processInterception() {
 		Quadrant bulletQuadrant = bullet.getLocation();
 		AbstractTank opponent = getOpponent();
 		Quadrant opponentQuadrant = getOpponentLocation();
 
 		if (opponentQuadrant.equals(bulletQuadrant)) {
 			bullet.destroy();
-			opponent.destroy();
-			repaint();
-            System.out.println("TANK DESTROYED: " + opponent);
+            boolean isDestroyed = opponent.destroy();
+            if (isDestroyed) {
+                System.out.println("TANK DESTROYED: " + opponent);
+            }
             return true;
 		}
 
@@ -59,107 +90,77 @@ public class ActionField extends JPanel {
 	}
 	
 	public void processMove(AbstractTank tank) throws InterruptedException {
-		currentTank = tank;
-		Quadrant startQuadrant = getQuadrant(tank.getX(), tank.getY());
-		Direction direction = tank.getDirection();
+        currentTank = tank;
+        Quadrant startQuadrant = tank.getLocation();
+        Direction direction = tank.getDirection();
 
-		if (moveIsLegal()) {
-			while (!moveIsFinished(startQuadrant)) {
-				tank.updateX(direction.stepX);
-				tank.updateY(direction.stepY);
-				repaint();
-				Thread.sleep(tank.getSpeed());
-			}
-			System.out.println("MOVED " + direction);
-		} else {
-			System.out.println("NO MOVE, direction: " + direction);
-			Thread.sleep(tank.getSpeed());
-		}
-
+        if (isLegalMove()) {
+            while (!isFinishedMove(startQuadrant)) {
+                tank.updateX(direction.stepX);
+                tank.updateY(direction.stepY);
+                Thread.sleep(tank.getSpeed());
+            }
+            System.out.println("MOVED " + direction);
+        } else {
+            System.out.println("NO MOVE, direction: " + direction);
+            Thread.sleep(tank.getSpeed());
+        }
 	}
 
-    public boolean moveIsLegal(AbstractTank tank) {
+    public boolean isLegalMove(AbstractTank tank) {
         currentTank = tank;
-        return moveIsLegal();
+        return isLegalMove();
     }
 
-    private boolean moveIsLegal() {
+    private boolean isLegalMove() {
         Quadrant quadrant = currentTank.getLocation();
         Direction direction = currentTank.getDirection();
         Quadrant neighborQuadrant = quadrant.getNeighbor(direction);
         return quadrant.hasEmptyNeighbor(direction, battleField) && !getOpponentLocation().equals(neighborQuadrant);
     }
 
-	private boolean moveIsFinished(Quadrant startQuadrant) {
-		Quadrant currentQuadrant = currentTank.getLocation();
+    private boolean isFinishedMove(Quadrant startQuadrant) {
+        Quadrant currentQuadrant = currentTank.getLocation();
         Direction direction = currentTank.getDirection();
-		Quadrant nextQuadrant = getQuadrant(currentTank.getX() + direction.stepX, currentTank.getY() + direction.stepY);
+        Quadrant nextQuadrant = ActionField.getQuadrant(currentTank.getX() + direction.stepX,
+                                                        currentTank.getY() + direction.stepY);
         // nextQuadrant is not currentQuadrant.getNeighbor !
-		return currentQuadrant.v >= startQuadrant.v + 1 || currentQuadrant.h >= startQuadrant.h + 1
-				|| nextQuadrant.v < startQuadrant.v - 1 || nextQuadrant.h < startQuadrant.h - 1;
-	}
-	
+        return currentQuadrant.v >= startQuadrant.v + 1 || currentQuadrant.h >= startQuadrant.h + 1
+                || nextQuadrant.v < startQuadrant.v - 1 || nextQuadrant.h < startQuadrant.h - 1;
+    }
+
 	public void processTurn(AbstractTank tank) {
 		currentTank = tank;
-		repaint();
 	}
 	
 	public void processFire(Bullet bullet, AbstractTank tank) throws InterruptedException {
-		this.bullet = bullet;
-		this.currentTank = tank;
-		Direction bulletDirection = bullet.getDirection();
+        this.bullet = bullet;
+        this.currentTank = tank;
+        Direction bulletDirection = bullet.getDirection();
 
-		while (true) {
-			Quadrant nextQuadrant = getQuadrant(bullet.getX() + bulletDirection.stepX,
+        while (true) {
+            Quadrant nextQuadrant = getQuadrant(bullet.getX() + bulletDirection.stepX,
                                                 bullet.getY() + bulletDirection.stepY);
-			if (!nextQuadrant.isValid(battleField)) {
-				bullet.destroy();
-				repaint();
-				break;
-			}
-			bullet.updateX(bulletDirection.stepX);
-			bullet.updateY(bulletDirection.stepY);
-			repaint();
-			Thread.sleep(Bullet.SPEED);
-			if (processInterception()) {
-				bullet.destroy();
-				repaint();
-				break;
-			}
-		}
-	}
-	
-	public ActionField(BattleField battleField, Quadrant defenderQuadrant, Direction defenderDirection,
-                                                Quadrant aggressorQuadrant, Direction aggressorDirection)
-    {
-		this.battleField = battleField;
-		defender = new T34(defenderQuadrant, defenderDirection, this, battleField);
-		bullet = new Bullet(-100, -100, Direction.NONE);
-		aggressor = new Tiger(aggressorQuadrant, aggressorDirection, this, battleField);
-		currentTank = defender;
 
-		JFrame frame = new JFrame("BATTLE FIELD");
-		frame.setLocation(750, 150);
-		frame.setMinimumSize(new Dimension(battleField.getWidth() + 16, battleField.getHeight() + 39));
-		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-		frame.getContentPane().add(this);
-		frame.pack();
-		frame.setVisible(true);
-	}
-	
-	@Override
-	protected void paintComponent(Graphics g) {
-		super.paintComponent(g);
+            if (!nextQuadrant.isValid(battleField)) {
+                bullet.destroy();
+                break;
+            }
 
-		battleField.draw(g);
+            bullet.updateX(bulletDirection.stepX);
+            bullet.updateY(bulletDirection.stepY);
+            Thread.sleep(Bullet.SPEED);
 
-		defender.draw(g);
+            if (processInterception()) {
+                bullet.destroy();
+                break;
+            }
+        }
+    }
 
-		aggressor.draw(g);
-
-		bullet.draw(g);
-	}
-
+    public void processDestroy(AbstractTank tank) {
+        currentTank = tank;
+    }
 
 	public static Coordinates getQuadrantXY(int v, int h) {
 		return new Coordinates((v - 1) * 64, (h - 1) * 64);
@@ -172,16 +173,4 @@ public class ActionField extends JPanel {
 	public static Quadrant getQuadrant(int x, int y) {
 		return new Quadrant(1 + Math.floorDiv(x, 64), 1 + Math.floorDiv(y, 64));
 	}
-
-
-	public void processDestroy(AbstractTank tank) {
-		currentTank = tank;
-        repaint();
-	}
-
-//	public Quadrant getRandomQuadrant() {
-//		Random random = new Random();
-//		int randomNumber = random.nextInt(quadrants.length);
-//		return quadrants[randomNumber];
-//	}
 }

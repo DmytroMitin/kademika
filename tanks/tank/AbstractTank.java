@@ -76,7 +76,7 @@ public abstract class AbstractTank implements Drowable, Destroyable {
 		af.processTurn(this);
 	}
 
-	public void move() throws InterruptedException {
+	public void move() throws InterruptedException{
 		af.processMove(this);
 	}
 
@@ -88,7 +88,7 @@ public abstract class AbstractTank implements Drowable, Destroyable {
 	public void moveAndFire() throws InterruptedException {
         Quadrant quadrant = getLocation();
 		Quadrant nextQuadrant = quadrant.getNeighbor(direction);
-        while (nextQuadrant.isValid(bf) && !af.moveIsLegal(this)) {
+        while (nextQuadrant.isValid(bf) && !af.isLegalMove(this)) {
 			fire();
 		}
 		move();

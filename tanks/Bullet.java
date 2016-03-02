@@ -6,7 +6,7 @@ import java.awt.*;
 
 public class Bullet implements Drowable, Destroyable {
 	
-	public final static int SPEED = 5;
+	public final static int SPEED = 2;
 	
 	private int x;
 
