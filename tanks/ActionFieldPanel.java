@@ -10,13 +10,14 @@ import java.awt.event.ActionListener;
 
 public class ActionFieldPanel extends JPanel implements ActionListener {
     private final ActionField actionField;
+    private final JFrame frame;
 
     public ActionFieldPanel(ActionField actionField) {
         this.actionField = actionField;
 
         setLayout(new BorderLayout());
 
-        JFrame frame = new JFrame("BATTLE FIELD");
+        frame = new JFrame("BATTLE FIELD");
         frame.setLocation(750, 150);
         BattleField battleField = actionField.getBattleField();
         Dimension size = new Dimension(battleField.getWidth(), battleField.getHeight());
@@ -50,5 +51,12 @@ public class ActionFieldPanel extends JPanel implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         revalidate();
         repaint();
+    }
+
+    public void gameOver(Object object) {
+        SwingUtilities.invokeLater(() -> {
+            new GameOverPanel(object);
+            frame.setVisible(false);
+        });
     }
 }

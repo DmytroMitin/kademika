@@ -9,4 +9,8 @@ public class Eagle extends FieldObject {
         file = "bin/tanks/img/eagle.jpg";
     }
 
+    @Override
+    public String toString() {
+        return "Eagle";
+    }
 }

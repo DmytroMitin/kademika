@@ -15,7 +15,7 @@ public class StartPanel extends JPanel {
         JFrame frame = new JFrame("START MENU");
         frame.setLocation(750, 150);
         frame.setMinimumSize(new Dimension(400, 400));
-        frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.getContentPane().add(this);
 
         setLayout(new GridBagLayout());
@@ -24,7 +24,7 @@ public class StartPanel extends JPanel {
         add(label, new GridBagConstraints(0, 0, 1, 1, 0, 0, CENTER, NONE, new Insets(0, 0, 0, 0), 0, 0));
 
         JComboBox dropDownList = new JComboBox(new String[]{"T34", "Tiger"});
-        dropDownList.setSelectedIndex(-1);
+        dropDownList.setSelectedIndex(0);
         dropDownList.addActionListener(e -> defenderType = (String) dropDownList.getSelectedItem());
         add(dropDownList, new GridBagConstraints(0, 1, 1, 1, 0, 0, CENTER, NONE, new Insets(0, 0, 0, 0), 0, 0));
 
@@ -44,13 +44,12 @@ public class StartPanel extends JPanel {
                 }
             }).start();
 
-            new ActionFieldPanel(actionField);
+            ActionFieldPanel actionFieldPanel = new ActionFieldPanel(actionField);
+            actionField.setPanel(actionFieldPanel);
         });
         add(button, new GridBagConstraints(0, 2, 1, 1, 0, 0, CENTER, NONE, new Insets(0, 0, 0, 0), 0, 0));
 
         frame.pack();
         frame.setVisible(true);
-
     }
-
 }

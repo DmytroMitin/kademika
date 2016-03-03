@@ -1,11 +1,15 @@
 package tanks;
 
 import tanks.field.BattleField;
+import tanks.field.Eagle;
+import tanks.field.FieldObject;
 import tanks.tank.AbstractTank;
 import tanks.tank.T34;
 import tanks.tank.Tiger;
 
 public class ActionField {
+    private ActionFieldPanel panel;
+
 	private final BattleField battleField;
 
 	private final AbstractTank defender;
@@ -47,7 +51,13 @@ public class ActionField {
         return battleField;
     }
 
+    public void setPanel(ActionFieldPanel panel) {
+        this.panel = panel;
+    }
+
     public void runTheGame() throws InterruptedException {
+        defender.move();
+        defender.fire();
         defender.move();
         defender.fire();
         defender.move();
@@ -76,20 +86,29 @@ public class ActionField {
             boolean isDestroyed = opponent.destroy();
             if (isDestroyed) {
                 System.out.println("TANK DESTROYED: " + opponent);
+                gameOver(opponent);
             }
             return true;
 		}
 
-		if (battleField.scan(bulletQuadrant) != null) {
+        FieldObject object = battleField.scan(bulletQuadrant);
+        if (object != null) {
 			battleField.update(bulletQuadrant, null);
 			System.out.println("QUADRANT CLEANED, vertical: " + bulletQuadrant.v + ", horizontal: " + bulletQuadrant.h);
+            if (object.getClass() == Eagle.class) {
+                gameOver(object);
+            }
 			return true;
 		}
 
 		return false;
 	}
-	
-	public void processMove(AbstractTank tank) throws InterruptedException {
+
+    private void gameOver(Object object) {
+        panel.gameOver(object);
+    }
+
+    public void processMove(AbstractTank tank) throws InterruptedException {
         currentTank = tank;
         Quadrant startQuadrant = tank.getLocation();
         Direction direction = tank.getDirection();
