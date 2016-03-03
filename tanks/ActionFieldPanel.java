@@ -10,6 +10,7 @@ import java.awt.event.ActionListener;
 
 public class ActionFieldPanel extends JPanel implements ActionListener {
     private final ActionField actionField;
+
     private final JFrame frame;
 
     public ActionFieldPanel(ActionField actionField) {

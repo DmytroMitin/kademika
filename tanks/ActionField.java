@@ -56,12 +56,7 @@ public class ActionField {
     }
 
     public void runTheGame() throws InterruptedException {
-        defender.move();
-        defender.fire();
-        defender.move();
-        defender.fire();
-        defender.move();
-        defender.fire();
+        defender.destroyOpponent();
     }
 
     public Quadrant getOpponentLocation() {
